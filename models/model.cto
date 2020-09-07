@@ -1,0 +1,118 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+namespace com.ngo1
+participant vendor identified by vendorId 
+    {
+    o String vendorId
+    o String firstName
+    o String vendorType
+    }
+
+asset ContainerAsset identified by assetId
+    {
+    o String assetId
+    --> vendor owner
+    o Integer quantity
+    
+    }
+asset AmountReceivedAsset identified by deliveryID
+    {
+    o String deliveryID
+    o Integer quantity
+    o Integer amountReceived
+    
+    }
+participant trustee identified by trusteeId 
+    {
+    o String trusteeId
+    o String firstName
+    }
+
+asset OverAllBalanceAsset identified by OBalanceId
+    {
+    o String OBalanceId
+    --> trustee owner
+    o Integer LatestBalance
+    
+    }
+
+transaction ContainerDelivery 
+    {
+    --> ContainerAsset containers
+    o Integer newContainerCount
+    o String deliveryID
+    o Integer amounttobeReceived
+    o Integer quantity
+    }
+
+event ContainerDeliveredEvent 
+    {
+    --> ContainerAsset containers
+    o Integer howManyBefore
+    o Integer howManyNow
+    }
+
+participant donor identified by donorId 
+    {
+    o String donorId
+    o String donorName
+    }
+
+asset DonatedAmountAsset identified by assetId
+    {
+    o String assetId
+    --> donor owner
+    o Integer donatedAmount
+    }
+
+transaction Donation
+    {
+    //--> DonatedAmountAsset donations
+    --> donor owner
+    o Integer DonatedAmount
+    }
+
+participant NGOManager identified by managerId 
+    {
+    o String managerId
+    o String managerName
+    }
+
+asset DeliveryReceivedAsset identified by assetId
+    {
+    o String assetId
+    --> NGOManager owner
+    o Integer quantity
+    o Integer amountToBeGiven
+    o String deliveryID
+    o String vendorId
+    }
+
+transaction DeliveryReceived
+    {
+    o Integer quantity
+    o Integer amountToBeGiven
+    o String deliveryID
+    o String vendorId
+    }
+
+event DonationEvent 
+    {
+    --> DonatedAmountAsset donations
+    o Integer balanceBefore
+    o Integer balanceNow
+    }
+
+
+
